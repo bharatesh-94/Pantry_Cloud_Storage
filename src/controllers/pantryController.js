@@ -21,7 +21,7 @@ const createPantry = async function (req, res){
             return res.status(400).send({ status: false, message: 'Please provide details in request body' })
         }
 
-        let {email, name} = requestbody;
+        const {email, name} = requestbody;
 
         if (!isValid(email)) {
             return res.status(400).send({ status: false, message: `Email is required` })
@@ -35,11 +35,11 @@ const createPantry = async function (req, res){
             return res.status(400).send({ status: false, message: 'Pantry name is required' })
         }
           
-        let pantryId = crypto.randomUUID();
+        const pantryId = crypto.randomUUID();
 
         const pantrydata = {email, name, pantryId}
 
-        let data = await pantryModel.create(pantrydata)
+        const data = await pantryModel.create(pantrydata)
 
         res.status(201).send({status: true, pantryId: data.pantryId, message: `${name} sucessfully created, please save the above pantry ID` })
 
@@ -51,7 +51,7 @@ const createPantry = async function (req, res){
 
 const getAllPantryDetails = async function (req, res) {
     try {
-        let pantryId = req.params.PANTRYID
+        const pantryId = req.params.PANTRYID
 
         let pantryDetail = await pantryModel.findOne({ pantryId: pantryId }).select({ _id: 0, pantryId: 0, email: 0, createdAt: 0, updatedAt: 0, __v: 0})
 
@@ -61,7 +61,7 @@ const getAllPantryDetails = async function (req, res) {
 
         pantryDetail = pantryDetail.toObject();
 
-        let basketData = await bucketModel.find({ pantryId: pantryId }).select({ name: 1, ttl: 1, _id: 0 })
+        const basketData = await bucketModel.find({ pantryId: pantryId }).select({ name: 1, ttl: 1, _id: 0 })
 
         pantryDetail.baskets = basketData
 
